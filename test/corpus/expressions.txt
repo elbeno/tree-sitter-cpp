@@ -1330,3 +1330,27 @@ foo and_eq bar();
       (call_expression
         (identifier)
         (argument_list)))))
+
+================================================================================
+Dependent template-template arguments
+================================================================================
+
+template <typename T> using X = A<T::template V>;
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (template_declaration
+    (template_parameter_list
+      (type_parameter_declaration
+        (type_identifier)))
+    (alias_declaration
+      (type_identifier)
+      (type_descriptor
+        (template_type
+          (type_identifier)
+          (template_argument_list
+            (qualified_template_identifier
+              (namespace_identifier)
+              (dependent_name
+                (identifier)))))))))

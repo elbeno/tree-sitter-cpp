@@ -10607,7 +10607,7 @@
                   "members": [
                     {
                       "type": "PREC_DYNAMIC",
-                      "value": 3,
+                      "value": 4,
                       "content": {
                         "type": "SYMBOL",
                         "name": "type_descriptor"
@@ -10615,7 +10615,7 @@
                     },
                     {
                       "type": "PREC_DYNAMIC",
-                      "value": 2,
+                      "value": 3,
                       "content": {
                         "type": "ALIAS",
                         "content": {
@@ -10628,10 +10628,18 @@
                     },
                     {
                       "type": "PREC_DYNAMIC",
-                      "value": 1,
+                      "value": 2,
                       "content": {
                         "type": "SYMBOL",
                         "name": "_expression"
+                      }
+                    },
+                    {
+                      "type": "PREC_DYNAMIC",
+                      "value": 1,
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "qualified_template_identifier"
                       }
                     }
                   ]
@@ -10650,7 +10658,7 @@
                         "members": [
                           {
                             "type": "PREC_DYNAMIC",
-                            "value": 3,
+                            "value": 4,
                             "content": {
                               "type": "SYMBOL",
                               "name": "type_descriptor"
@@ -10658,7 +10666,7 @@
                           },
                           {
                             "type": "PREC_DYNAMIC",
-                            "value": 2,
+                            "value": 3,
                             "content": {
                               "type": "ALIAS",
                               "content": {
@@ -10671,10 +10679,18 @@
                           },
                           {
                             "type": "PREC_DYNAMIC",
-                            "value": 1,
+                            "value": 2,
                             "content": {
                               "type": "SYMBOL",
                               "name": "_expression"
+                            }
+                          },
+                          {
+                            "type": "PREC_DYNAMIC",
+                            "value": 1,
+                            "content": {
+                              "type": "SYMBOL",
+                              "name": "qualified_template_identifier"
                             }
                           }
                         ]
@@ -13382,6 +13398,19 @@
         }
       ]
     },
+    "dependent_template_identifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "template"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        }
+      ]
+    },
     "_scope_resolution": {
       "type": "PREC",
       "value": 1,
@@ -13568,6 +13597,31 @@
                 "name": "_type_identifier"
               }
             ]
+          }
+        }
+      ]
+    },
+    "qualified_template_identifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_scope_resolution"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "ALIAS",
+            "content": {
+              "type": "SYMBOL",
+              "name": "dependent_template_identifier"
+            },
+            "named": true,
+            "value": "dependent_name"
           }
         }
       ]
@@ -14007,6 +14061,11 @@
     [
       "qualified_type_identifier",
       "qualified_identifier"
+    ],
+    [
+      "qualified_identifier",
+      "qualified_type_identifier",
+      "qualified_template_identifier"
     ],
     [
       "dependent_type_identifier",

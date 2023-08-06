@@ -48,6 +48,7 @@ module.exports = grammar(C, {
     [$.template_method, $.field_expression],
     [$.template_type, $.qualified_type_identifier],
     [$.qualified_type_identifier, $.qualified_identifier],
+    [$.qualified_identifier, $.qualified_type_identifier, $.qualified_template_identifier],
     [$.dependent_type_identifier, $.dependent_identifier],
     [$.comma_expression, $.initializer_list],
     [$._expression_not_binary, $._declarator],
@@ -632,9 +633,10 @@ module.exports = grammar(C, {
     template_argument_list: $ => seq(
       '<',
       commaSep(choice(
-        prec.dynamic(3, $.type_descriptor),
-        prec.dynamic(2, alias($.type_parameter_pack_expansion, $.parameter_pack_expansion)),
-        prec.dynamic(1, $._expression),
+        prec.dynamic(4, $.type_descriptor),
+        prec.dynamic(3, alias($.type_parameter_pack_expansion, $.parameter_pack_expansion)),
+        prec.dynamic(2, $._expression),
+        prec.dynamic(1, $.qualified_template_identifier),
       )),
       alias(token(prec(1, '>')), '>'),
     ),
@@ -1133,6 +1135,7 @@ module.exports = grammar(C, {
     dependent_identifier: $ => seq('template', $.template_function),
     dependent_field_identifier: $ => seq('template', $.template_method),
     dependent_type_identifier: $ => seq('template', $.template_type),
+    dependent_template_identifier: $ => seq('template', $.identifier),
 
     _scope_resolution: $ => prec(1, seq(
       field('scope', optional(choice(
@@ -1175,6 +1178,11 @@ module.exports = grammar(C, {
         $.template_type,
         $._type_identifier,
       )),
+    ),
+
+    qualified_template_identifier: $ => seq(
+      repeat1($._scope_resolution),
+      field('name', alias($.dependent_template_identifier, $.dependent_name)),
     ),
 
     qualified_operator_cast_identifier: $ => seq(
